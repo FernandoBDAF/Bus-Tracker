@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real Time Bus Tracker</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    </div>
+
+    <script>
+      async function getBusLocations() {
+        const url =
+          "https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip";
+        const response = await fetch(url);
+        const json = await response.json();
+        return json.data;
+      }
+      let control = null
+      async function run() {
+        const buses = await getBusLocations();
+        if (control === null) {
+          control = buses ;
+        }
+        return buses;
+      }
+
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoiZmJkYWYiLCJhIjoiY2xycGgyaGtlMDRvZDJqbjdiaTJ4N3lodSJ9._MyPu5Nu9mA_TvnKM4fUjg";
+
+        var map = new mapboxgl.Map({
+          container: "map",
+          style: "mapbox://styles/mapbox/streets-v11",
+          center: [-71.104081, 42.365554],
+          zoom: 12,
+        });
+
+        const color = ["#FF5733", "#3399FF", "#33FF57", "#FF3399", "#FF33FF", "#FFFF33", "#33FFFF", "#FF5733", "#3399FF", "#33FF57", "#FF3399", "#FF33FF", "#FFFF33", "#33FFFF", "#FF5733", "#3399FF", "#33FF57", "#FF3399", "#FF33FF", "#FFFF33", "#33FFFF", "#FF5733", "#3399FF", "#33FF57", "#FF3399", "#FF33FF", "#FFFF33", "#33FFFF", "#FF5733", "#3399FF", "#33FF57", "#FF3399", "#FF33FF", "#FFFF33", "#33FFFF", "#FF5733", "#3399FF", "#33FF57", "#FF3399", "#FF33FF", "#FFFF33", "#33FFFF", "#FF5733", "#3399FF", "#33FF57", "#FF3399", "#FF33FF", "#FFFF33", "#33FFFF", "#FF5733", "#3399FF", "#33FF57", "#FF3399", "#FF33FF", "#FFFF33", "#33FFFF"];
+        let c = 0;
+        let busColor = {};
+        let j = 0;
+        let markers = {}
+      
+        async function setPoints() {
+        
+
+        const buses = await run();
+        let marker = null;
+        let textMarker = null;
+        console.log("Updating...");
+        buses.forEach((bus, i) => {
+          if (!(bus.id in busColor)) {
+            busColor[bus.id] = color[c];
+            c++;
+          }
+          marker = new mapboxgl.Marker({color: busColor[bus.id]})
+            .setLngLat([bus.attributes.longitude, bus.attributes.latitude])
+            .addTo(map);
+        
+        
+
+        var textElement = document.createElement("div");
+        textElement.style.color = "#333";
+        textElement.style.backgroundColor = "#fff";
+        textElement.style.fontSize = "14px";
+        textElement.textContent = `${j}`;
+        textElement.style.padding = "0px 2px 0px 2px";
+        
+
+        // Position the text element relative to the marker
+        textMarker = new mapboxgl.Marker({
+        element: textElement,
+        })
+        .setLngLat([bus.attributes.longitude, bus.attributes.latitude])
+        .addTo(map);
+
+        if (bus.id in markers) {
+          markers[bus.id].push([marker, textMarker]);
+        } else {
+            markers[bus.id] = [[marker, textMarker]];
+        }
+
+        });
+        
+        j++;
+      }
+
+      function hideMarker(id) {
+        if (id in markers) {
+          markers[id].forEach((marker) => {
+            marker[0].remove();
+            marker[1].remove();
+          });
+        }
+      }
+
+      function showMarker(id) {
+        if (id in markers) {
+          markers[id].forEach((marker) => {
+            marker[0].addTo(map);
+            marker[1].addTo(map);
+          });
+        }
+      }
+
+      setPoints();
+      setInterval(setPoints, 15000);
+    </script>
+  </body>
+</html>
