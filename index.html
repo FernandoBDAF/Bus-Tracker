@@ -15,12 +15,14 @@
 
     <div id="list">
       <div id="timer">TIMER</div>
-      <div>
-        <button onclick="hideAll()">Hide All</button>
-        <button onclick="showAll()">Show All</button>
-        <button onclick="listMarkers()">List All</button>
-        <button id="startButton" onclick="startRunning()">Stop</button>
+
+      <div id="buttons">
+        <button style="width: 70px; height: 30px;" onclick="hideAll()">Hide All</button>
+        <button style="width: 70px; height: 30px;" onclick="showAll()">Show All</button>
+        <button style="width: 70px; height: 30px;" onclick="listMarkers()">List All</button>
+        <button style="width: 70px; height: 30px; background-color: red; color: white;" id="startButton" onclick="startRunning()">Stop</button>
       </div>
+
       <div id="BusesInfo">
         <h4>List of buses</h4>
         <div id="buses"></div>

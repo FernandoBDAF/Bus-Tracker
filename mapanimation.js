@@ -102,6 +102,7 @@ function listAddMarker(color, id) {
   father.style.display = "flex";
   father.style.alignItems = "center";
   father.style.justifyContent = "space-between";
+  father.style.gap = "5px";
 
   let child = document.createElement("div");
   child.style.borderRadius = "50%";
@@ -137,8 +138,8 @@ function listAddMarker(color, id) {
     }
 
     let child6 = document.createElement("div");
-    child6.style.display = "flex";
-    child6.style.flexDirection = "column";
+    // child6.style.display = "flex";
+    // child6.style.flexDirection = "column";
 
     child6.appendChild(child4);
     child6.appendChild(child5);
@@ -146,8 +147,7 @@ function listAddMarker(color, id) {
     father.appendChild(child);
     father.appendChild(child2);
     father.appendChild(child3);
-    father.appendChild(child4);
-    father.appendChild(child5);
+    father.appendChild(child6);
 
 
     document.getElementById("buses").appendChild(father);
@@ -171,6 +171,7 @@ function startRunning() {
     let button = document.getElementById("startButton");
     if (running) {
         clearInterval(running);
+        clearInterval(listAll);
         running = null;
         button.innerHTML = "Start";
         button.style.backgroundColor = "green";
@@ -178,6 +179,7 @@ function startRunning() {
         pauseTimer()
     } else {
         running = setInterval(setPoints, 15000);
+        listAll = setInterval(listMarkers, 15000);
         button.innerHTML = "Stop";
         button.style.backgroundColor = "red";
         button.style.color = "white";
