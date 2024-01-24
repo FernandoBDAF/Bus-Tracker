@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    padding: 0;
+  }
+  #map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+  #list {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 100%;
+    background-color: #fff;
+    z-index: 1;
+    padding: 10px;
+    overflow-y: scroll;
+  }
+  #startButton{
+    background-color: "red";
+    color: "white";
+  }
